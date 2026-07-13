@@ -136,32 +136,13 @@
             border-color: transparent;
         }
 
-        .contact-info {
-            font-size: 0.9rem;
-            font-weight: 600;
-            color: var(--surface-color);
-            background: linear-gradient(135deg, var(--accent-orange), #ff8a4c);
-            padding: 0.6rem 1.5rem;
-            border-radius: 50px;
-            box-shadow: 0 4px 15px rgba(242, 101, 34, 0.3);
-            cursor: pointer;
-            transition: var(--transition);
-            border: none;
-            font-family: var(--font-heading);
-        }
-        
-        .contact-info:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 20px rgba(242, 101, 34, 0.4);
-        }
-
-        /* Seamless Video Hero */
+        /* Seamless Video Hero - using svh for mobile browser bar fix */
         .video-hero {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
-            height: 100vh;
+            height: 100svh;
             z-index: 1;
             background-image: linear-gradient(to bottom, rgba(0,0,0,0.2), rgba(0,0,0,0.6)), url('https://images.unsplash.com/photo-1635424785729-c022fc1a61bd?q=80&w=1228&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D');
             background-size: cover;
@@ -182,6 +163,7 @@
             aspect-ratio: 16 / 9;
             position: relative;
             transform: translateY(-10%); 
+            transition: var(--transition);
         }
 
         .video-container iframe {
@@ -198,7 +180,7 @@
 
         .scroll-hint {
             position: absolute;
-            bottom: 40px;
+            bottom: 8svh; /* Moved up to prevent mobile cut-off */
             left: 50%;
             transform: translateX(-50%);
             color: var(--text-dark);
@@ -214,13 +196,14 @@
             border-radius: 50px;
             backdrop-filter: blur(5px);
             box-shadow: var(--shadow-sm);
+            white-space: nowrap;
         }
 
         /* Main Content wrapper */
         .main-wrapper {
             position: relative;
             z-index: 2;
-            margin-top: 100vh;
+            margin-top: 100svh;
             background-color: var(--bg-color);
             box-shadow: 0 -20px 40px rgba(0,0,0,0.2);
             border-top-left-radius: 30px;
@@ -307,19 +290,14 @@
             letter-spacing: 2px;
             margin-bottom: 1.5rem;
             font-family: var(--font-heading);
-            text-align: center;
         }
 
         .logo-carousel {
             display: flex;
-            gap: 2rem;
+            gap: 4rem;
             justify-content: center;
             align-items: center;
             flex-wrap: wrap;
-        }
-
-        @media (min-width: 600px) {
-            .logo-carousel { gap: 4rem; }
         }
 
         .brand-logo {
@@ -368,7 +346,6 @@
             display: none;
         }
 
-        /* Profile-pic style category cards */
         .tab-btn {
             display: flex;
             flex-direction: column;
@@ -468,11 +445,10 @@
 
         .menu-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-            gap: 2rem;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 2.5rem;
         }
 
-        /* Menu Card */
         .menu-card {
             background-image: linear-gradient(rgba(255, 255, 255, 0.92), rgba(255, 255, 255, 0.92)), url('https://i.postimg.cc/0QJTnWRt/Gemini-Generated-Image-41gsq841gsq841gs.png');
             background-size: cover;
@@ -549,7 +525,6 @@
             line-height: 1.5;
         }
 
-        /* Swipe Hint */
         .swipe-hint {
             text-align: center;
             color: var(--text-light);
@@ -562,7 +537,6 @@
             gap: 0.5rem;
         }
 
-        /* View Full Menu Button */
         .menu-action-container {
             text-align: center;
             padding: 1rem 0 4rem 0;
@@ -628,7 +602,6 @@
             position: relative;
         }
 
-        /* Collage Pattern - Masonry Effect */
         .photo-collage img:nth-child(1) { grid-column: span 2; grid-row: span 2; }
         .photo-collage img:nth-child(2) { grid-column: span 2; grid-row: span 1; }
         .photo-collage img:nth-child(3) { grid-column: span 1; grid-row: span 1; }
@@ -820,7 +793,11 @@
 
         /* Tablet Responsiveness */
         @media (max-width: 900px) {
-            .nav-details { display: none; } 
+            .nav-details {
+                font-size: 0.75rem;
+                padding: 0.4rem 1rem;
+                gap: 1rem;
+            }
             
             .photo-collage {
                 grid-template-columns: repeat(2, 1fr);
@@ -836,11 +813,53 @@
 
         /* Mobile Responsiveness Enhancements */
         @media (max-width: 768px) {
-            nav { padding: 1rem; }
+            nav { 
+                flex-wrap: wrap;
+                padding: 1rem; 
+            }
+            
             nav.scrolled { padding: 0.8rem 1rem; }
             
+            .nav-left { flex: unset; }
+            .nav-actions { flex: unset; }
+            
             .logo { font-size: 1.4rem; }
-            .nav-actions .contact-info { padding: 0.5rem 1rem; font-size: 0.8rem; }
+            
+            /* Bringing Top Bar Address into View on Mobile */
+            .nav-details {
+                position: static;
+                transform: none;
+                width: 100%;
+                order: 3;
+                justify-content: center;
+                margin-top: 0.8rem;
+                font-size: 0.75rem;
+                background: rgba(255, 255, 255, 0.25);
+            }
+            
+            nav.scrolled .nav-details {
+                background: rgba(0, 0, 0, 0.05);
+                color: var(--text-dark);
+            }
+            
+            /* Fixing vertical space and aspect ratio of hero video */
+            .video-container { 
+                width: 95%;
+                aspect-ratio: 1 / 1;
+                border-radius: 60px;
+                transform: translateY(-5%);
+            }
+            
+            .video-container iframe {
+                width: 178%;
+                left: 50%;
+                transform: translateX(-50%) scale(1.05);
+            }
+            
+            /* Fix scroll hint getting lost below screen */
+            .scroll-hint {
+                bottom: 10svh;
+            }
             
             .scroll-video-section { padding: 1.5rem 1rem 3rem 1rem; }
             
@@ -861,6 +880,7 @@
                 grid-auto-rows: 250px;
                 padding: 0 1rem;
             }
+            
             .photo-collage img {
                 grid-column: span 1 !important;
                 grid-row: span 1 !important;
@@ -870,10 +890,11 @@
             .modal-content h2 { font-size: 1.6rem; }
         }
 
-        /* Extra small devices (iPhone SE, old Androids) */
+        /* Extra small devices */
         @media (max-width: 380px) {
             .menu-grid { grid-template-columns: 1fr; } 
             .logo { font-size: 1.2rem; }
+            .nav-details { flex-direction: column; gap: 0.3rem; text-align: center; }
         }
     </style>
 </head>
@@ -884,8 +905,8 @@
         <div class="modal-content" onclick="event.stopPropagation()">
             <button class="modal-close" onclick="closeModal(event)">×</button>
             <h2>About DQB</h2>
-            <p>Welcome to <strong>Desi Quick Bites!</strong> Located perfectly at <strong>273 Huntington Ave</strong>, right in front of Northeastern University[cite: 2]. We are your go-to spot for authentic, fast, and delicious Indian street food[cite: 2].</p>
-            <p>Whether you're craving a quick Pani Puri between classes or a comforting Biryani to end the day, our menu is crafted fresh daily with the finest ingredients to bring you the true flavors of home[cite: 2].</p>
+            <p>Welcome to <strong>Desi Quick Bites!</strong> Located perfectly at <strong>273 Huntington Ave</strong>, right in front of Northeastern University[cite: 23]. We are your go-to spot for authentic, fast, and delicious Indian street food[cite: 23].</p>
+            <p>Whether you're craving a quick Pani Puri between classes or a comforting Biryani to end the day, our menu is crafted fresh daily with the finest ingredients to bring you the true flavors of home[cite: 23].</p>
         </div>
     </div>
 
@@ -908,8 +929,8 @@
 
         <div class="nav-actions">
             <a href="https://order.tbdine.com/pickup/63849" target="_blank" rel="noopener noreferrer" style="background-color:#06556E;padding:0 40px;color:#FFFFFFFF;align-items:center;line-height:22px;font-size:14px;font-weight:500;letter-spacing:0.4px;cursor:pointer;height:34px;border-radius:4px;border:1px solid #06556E;display:inline-flex;justify-content:center;min-width:95px;text-decoration:none;font-family:Helvetica, Arial, sans-serif;user-select:none">
-  Order Online
-</a>
+              Order Online
+            </a>
         </div>
     </nav>
 
@@ -1036,14 +1057,14 @@
                 <h2 class="section-title">Soft Serve</h2>
                 <div class="menu-grid">
 		            <div class="menu-card"><div class="card-image" style="background-image: url('./2.softserve/classic.png');"></div><div class="card-content"><div class="item-header"><span class="item-name">Classic Soft Serve</span><span class="item-price">$5.99</span></div></div></div>
-		            <div class="menu-card"><div class="card-image" style="background-image: url('./2.softserve/softserve.png');"></div><div class="card-content"><div class="item-header"><span class="item-name">Soft Serve with Toppings</span><span class="item-price">$6.99</span></div><p class="item-desc">Chocolate sauce, chocolate chips, biscoff crumble, rose, saffron, kitkat, pistachio[cite: 2]</p></div></div>
+		            <div class="menu-card"><div class="card-image" style="background-image: url('./2.softserve/softserve.png');"></div><div class="card-content"><div class="item-header"><span class="item-name">Soft Serve with Toppings</span><span class="item-price">$6.99</span></div><p class="item-desc">Chocolate sauce, chocolate chips, biscoff crumble, rose, saffron, kitkat, pistachio[cite: 23]</p></div></div>
                 </div>
             </section>
 
             <section id="desserts" class="menu-section">
                 <h2 class="section-title">Desserts</h2>
                 <div class="menu-grid">
-                    <div class="menu-card"><div class="card-image" style="background-image: url('./3.dessert/falooda.png');"></div><div class="card-content"><div class="item-header"><span class="item-name">Falooda</span><span class="item-price">$9.49</span></div><p class="item-desc">Rose, Mango and Saffron[cite: 2]</p></div></div>
+                    <div class="menu-card"><div class="card-image" style="background-image: url('./3.dessert/falooda.png');"></div><div class="card-content"><div class="item-header"><span class="item-name">Falooda</span><span class="item-price">$9.49</span></div><p class="item-desc">Rose, Mango and Saffron[cite: 23]</p></div></div>
                     <div class="menu-card"><div class="card-image" style="background-image: url('./3.dessert/desserts.png');"></div><div class="card-content"><div class="item-header"><span class="item-name">Gulab Jamun (2 pcs)</span><span class="item-price">$6.49</span></div></div></div>
                 </div>
             </section>
@@ -1052,7 +1073,7 @@
                 <h2 class="section-title">Beverages</h2>
                 <div class="menu-grid">
                     <div class="menu-card"><div class="card-image" style="background-image: url('./4.beverages/soda.png');"></div><div class="card-content"><div class="item-header"><span class="item-name">Soft Drinks</span><span class="item-price">$6.49</span></div></div></div>
-                    <div class="menu-card"><div class="card-image" style="background-image: url('./4.beverages/sweet%20lassi.png');"></div><div class="card-content"><div class="item-header"><span class="item-name">Lassi</span><span class="item-price">$6.49</span></div><p class="item-desc">Sweet/Salted/Rose/Strawberry[cite: 2]</p></div></div>
+                    <div class="menu-card"><div class="card-image" style="background-image: url('./4.beverages/sweet%20lassi.png');"></div><div class="card-content"><div class="item-header"><span class="item-name">Lassi</span><span class="item-price">$6.49</span></div><p class="item-desc">Sweet/Salted/Rose/Strawberry[cite: 23]</p></div></div>
                     <div class="menu-card"><div class="card-image" style="background-image: url('./4.beverages/mango%20lassi.png');"></div><div class="card-content"><div class="item-header"><span class="item-name">Mango Lassi</span><span class="item-price">$6.49</span></div></div></div>
                     <div class="menu-card"><div class="card-image" style="background-image: url('./4.beverages/buttermilk.png');"></div><div class="card-content"><div class="item-header"><span class="item-name">Buttermilk</span><span class="item-price">$6.49</span></div></div></div>
                 </div>
@@ -1071,9 +1092,9 @@
             <section id="dosa" class="menu-section">
                 <h2 class="section-title">Dosa & Uttapam</h2>
                 <div class="menu-grid">
-                    <div class="menu-card"><div class="card-content"><div class="item-header"><span class="item-name">Butter Dosa</span><span class="item-price">$11.99</span></div></div></div>
-                    <div class="menu-card"><div class="card-content"><div class="item-header"><span class="item-name">Cheese Dosa</span><span class="item-price">$13.99</span></div></div></div>
-                    <div class="menu-card"><div class="card-content"><div class="item-header"><span class="item-name">Mysore Dosa</span><span class="item-price">$13.49</span></div></div></div>
+                    <div class="menu-card"><div class="card-image" style="background-image: url('./6.dosa/dosa.png');"></div><div class="card-content"><div class="item-header"><span class="item-name">Butter Dosa</span><span class="item-price">$11.99</span></div></div></div>
+                    <div class="menu-card"><div class="card-image" style="background-image: url('./6.dosa/dosa.png');"></div><div class="card-content"><div class="item-header"><span class="item-name">Cheese Dosa</span><span class="item-price">$13.99</span></div></div></div>
+                    <div class="menu-card"><div class="card-image" style="background-image: url('./6.dosa/dosa.png');"></div><div class="card-content"><div class="item-header"><span class="item-name">Mysore Dosa</span><span class="item-price">$13.49</span></div></div></div>
                     <div class="menu-card"><div class="card-content"><div class="item-header"><span class="item-name">Podi Dosa</span><span class="item-price">$12.99</span></div></div></div>
                     <div class="menu-card"><div class="card-content"><div class="item-header"><span class="item-name">Onion Uttapam</span><span class="item-price">$12.99</span></div></div></div>
                     <div class="menu-card"><div class="card-content"><div class="item-header"><span class="item-name">Mix Veg Uttapam</span><span class="item-price">$13.99</span></div></div></div>
@@ -1106,7 +1127,7 @@
             <section id="bowls" class="menu-section">
                 <h2 class="section-title">Build Your Own Bowl</h2>
                 <div class="menu-grid">
-                    <div class="menu-card"><div class="card-image" style="background-image: url('./9.bowls/bowl.png');"></div><div class="card-content"><div class="item-header"><span class="item-name">Rice/Salad</span><span class="item-price">$16.99</span></div><p class="item-desc">choose any 1 from panner tikka, chicken tikka, tofu, daal makhani, chana masala, kofta[cite: 2]</p><p class="item-desc">choose any 4 from onions, green peppers, corn, tomato, cucumber, green onion,  jalapeno, green peas, corriander, carrot[cite: 2]</p><p class="item-desc">choose any 1 from makhani sauce, korma sauce, spinach sauce[cite: 2]</p><p class="item-desc">choose any 1 from corriander sauce, hot sauce, mint yoghurt sauce, garlic sauce[cite: 2]</p><p class="item-desc">choose any 1 from cheddar, mozzarella[cite: 2]</p></div></div>
+                    <div class="menu-card"><div class="card-image" style="background-image: url('./9.bowls/bowl.png');"></div><div class="card-content"><div class="item-header"><span class="item-name">Rice/Salad</span><span class="item-price">$16.99</span></div><p class="item-desc">choose any 1 from panner tikka, chicken tikka, tofu, daal makhani, chana masala, kofta[cite: 23]</p><p class="item-desc">choose any 4 from onions, green peppers, corn, tomato, cucumber, green onion,  jalapeno, green peas, corriander, carrot[cite: 23]</p><p class="item-desc">choose any 1 from makhani sauce, korma sauce, spinach sauce[cite: 23]</p><p class="item-desc">choose any 1 from corriander sauce, hot sauce, mint yoghurt sauce, garlic sauce[cite: 23]</p><p class="item-desc">choose any 1 from cheddar, mozzarella[cite: 23]</p></div></div>
                 </div>
             </section>
 
@@ -1124,7 +1145,7 @@
                     <div class="menu-card"><div class="card-content"><div class="item-header"><span class="item-name">Vada Pav</span><span class="item-price">$7.49</span></div></div></div>
                     <div class="menu-card"><div class="card-content"><div class="item-header"><span class="item-name">Samosa Pav</span><span class="item-price">$7.49</span></div></div></div>
                     <div class="menu-card"><div class="card-content"><div class="item-header"><span class="item-name">Add Potato Masala</span><span class="item-price">$1.99</span></div></div></div>
-                    <div class="menu-card"><div class="card-content"><div class="item-header"><span class="item-name">Make it Combo</span><span class="item-price">+$5.49</span></div></div></div>
+                    <div class="menu-card"><div class="card-content"><div class="item-header"><span class="item-name">Make it Combo (Fries + Drink)</span><span class="item-price">+$5.49</span></div></div></div>
                 </div>
             </section>
 
